@@ -3,6 +3,8 @@
 #include "../query/query_builder.hpp"
 #include "../model/dynamic_model.hpp"
 #include <vector>
+#include "../query/query_chain.hpp"
+
 
 class DynamicRepository {
 private:
@@ -10,6 +12,11 @@ private:
 
 public:
     DynamicRepository(DB& db) : db(db) {}
+
+    QueryChain query() {
+    return QueryChain(db);
+    }
+
 
     void save(const DynamicModel& obj) {
         auto data = obj.toMap();

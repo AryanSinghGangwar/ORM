@@ -10,7 +10,7 @@ private:
 public:
     DynamicModel(const std::string& tableName) : table(tableName) {}
 
-    // NEW: construct from DB row
+    
     DynamicModel(const std::string& tableName,
                  const std::map<std::string, std::string>& row)
         : table(tableName), data(row) {}

@@ -11,70 +11,109 @@ int main() {
 
     if (!db.connect("test.db")) return 1;
 
-    // reset table
+    // =========================
+    // 🔹 STEP 1: BASIC CRUD
+    // =========================
+    std::cout << "\n===== STEP 1: BASIC CRUD =====\n";
+
     db.execute("DROP TABLE IF EXISTS users;");
-    // db.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT);");
     db.execute("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);");
 
-    Repository<User> repo(db);
+    Repository<User> userRepo(db);
 
-    repo.save(User(1, "Aryan"));
-    repo.save(User(2, "Singh"));
+    userRepo.save(User(1, "Aryan"));
+    userRepo.save(User(2, "Singh"));
 
-    auto users = repo.findAll();
+    auto users = userRepo.findAll();
 
+    std::cout << "All Users:\n";
     for (auto& u : users) {
         std::cout << u.id << " " << u.name << "\n";
     }
-    auto filtered = repo.where("name = 'Aryan'");
+
+    // =========================
+    // 🔹 STEP 2: WHERE FILTER
+    // =========================
+    std::cout << "\n===== STEP 2: WHERE FILTER =====\n";
+
+    auto filtered = userRepo.where("name = 'Aryan'");
 
     for (auto& u : filtered) {
         std::cout << "Filtered: " << u.id << " " << u.name << "\n";
     }
-    repo.update(User(1, "UpdatedName"), "id = 1");
 
-    users = repo.findAll();
+    // =========================
+    // 🔹 STEP 3: UPDATE + DELETE
+    // =========================
+    std::cout << "\n===== STEP 3: UPDATE + DELETE =====\n";
 
+    userRepo.update(User(1, "UpdatedName"), "id = 1");
+
+    users = userRepo.findAll();
+    std::cout << "After Update:\n";
     for (auto& u : users) {
         std::cout << u.id << " " << u.name << "\n";
     }
-    repo.remove("id = 2");
-    users = repo.findAll();
 
+    userRepo.remove("id = 2");
+
+    users = userRepo.findAll();
+    std::cout << "After Delete:\n";
     for (auto& u : users) {
         std::cout << u.id << " " << u.name << "\n";
     }
+
+    // =========================
+    // 🔹 STEP 4: DYNAMIC ORM
+    // =========================
+    std::cout << "\n===== STEP 4: DYNAMIC ORM =====\n";
+
     std::vector<std::pair<std::string, std::string>> cols = {
-
         {"rollno", "INTEGER PRIMARY KEY"},
         {"name", "TEXT"},
         {"age", "INTEGER"}
     };
 
+    db.execute("DROP TABLE IF EXISTS students;");
     db.execute(QueryBuilder::buildCreateTable("students", cols));
 
-    // Create dynamic repo
-    DynamicRepository repody(db);
+    DynamicRepository dynamicRepo(db);
 
-    // Create dynamic model
     DynamicModel student("students");
 
     student.set("rollno", "12");
     student.set("name", "sin");
     student.set("age", "34");
 
-    // Save
-    repody.save(student);
-    auto students = repody.findAll("students");
+    dynamicRepo.save(student);
 
+    auto students = dynamicRepo.findAll("students");
+
+    std::cout << "Dynamic Data:\n";
     for (auto& s : students) {
         std::cout << s.get("rollno") << " "
-                << s.get("name") << " "
-                << s.get("age") << "\n";
+                  << s.get("name") << " "
+                  << s.get("age") << "\n";
     }
 
-        // Fetch
-        
+    // =========================
+    // 🔹 STEP 5: FLUENT API
+    // =========================
+    std::cout << "\n===== STEP 5: FLUENT QUERY API =====\n";
+
+    auto results = dynamicRepo
+                    .query()
+                    .table("students")
+                    .where("age > 20")
+                    .orderBy("name")
+                    .limit(10)
+                    .get();
+
+    for (auto& s : results) {
+        std::cout << s.get("rollno") << " "
+                  << s.get("name") << " "
+                  << s.get("age") << "\n";
+    }
 
     return 0;
 }
