@@ -35,33 +35,33 @@ Each layer has a clear responsibility:
 
 ---
 
-##Features
+## Features
 
-#Static ORM
+# Static ORM
 Type-based models using templates.
 Example: Repository<User> repo(db); repo.save(User(1, "Aryan"));
 
-#CRUD Operations
+# CRUD Operations
 Supports insert, update, delete, and fetch.
 Example: repo.save(User(1, "Aryan")); repo.update(User(1, "UpdatedName"), "id = 1"); repo.remove("id = 2"); auto users = repo.findAll();
 
-#WHERE Queries
+# WHERE Queries
 Supports filtering using conditions.
 Example: auto filtered = repo.where("name = 'Aryan'");
 
-#Dynamic ORM (Runtime Schema)
+# Dynamic ORM (Runtime Schema)
 No predefined model required.
 Example: DynamicModel student("students"); student.set("rollno", "12"); student.set("name", "Aryan"); student.set("age", "20");
 
-#Dynamic Table Creation
+# Dynamic Table Creation
 Tables can be created at runtime.
 Example: vector<pair<string, string>> cols = { {"rollno", "INTEGER PRIMARY KEY"}, {"name", "TEXT"}, {"age", "INTEGER"} }; db.execute(QueryBuilder::buildCreateTable("students", cols));
 
-#Fluent Query API
+# Fluent Query API
 Supports chainable queries.
 Example: auto results = dynamicRepo.query().table("students").where("age > 20").orderBy("name").limit(10).get();
 
-##Example Output
+## Example Output
 
 1 Aryan
 2 Singh
@@ -69,29 +69,29 @@ Example: auto results = dynamicRepo.query().table("students").where("age > 20").
 Filtered:
 1 Aryan
 
-#After Update:
+# After Update:
 1 UpdatedName
 
-#After Delete:
+# After Delete:
 1 UpdatedName
 
-#Dynamic:
+# Dynamic:
 12 Aryan 20
 
-##Build and Run
+## Build and Run
 
-#Requirements
+# Requirements
 C++17 or higher
 SQLite3
 g++ (MinGW / MSYS2 recommended)
 
-##Compile
+## Compile
 g++ examples/basic_usage.cpp drivers/sqlite/sqlite_driver.cpp -Iinclude -Idrivers/sqlite -lsqlite3 -o run.exe
 
-##Run
+## Run
 ./run.exe
 
-##Project Structure
+## Project Structure
 
 include/orm/core
 include/orm/model
@@ -102,7 +102,7 @@ drivers/sqlite
 models
 examples
 
-##What I Learned
+## What I Learned
 
 Designing layered architecture in C++
 Mapping objects to relational data
@@ -110,11 +110,11 @@ Building abstractions over low-level database APIs
 Handling both static and dynamic schema systems
 Structuring a project beyond isolated functions
 
-##Limitations
+## Limitations
 
 No relationship handling (joins)
 No prepared statements yet
 Basic error handling
 
-##Author
+## Author
 Aryan Singh
