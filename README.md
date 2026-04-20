@@ -37,27 +37,27 @@ Each layer has a clear responsibility:
 
 ## Features
 
-# Static ORM
+## Static ORM
 Type-based models using templates.
 Example: Repository<User> repo(db); repo.save(User(1, "Aryan"));
 
-# CRUD Operations
+## CRUD Operations
 Supports insert, update, delete, and fetch.
 Example: repo.save(User(1, "Aryan")); repo.update(User(1, "UpdatedName"), "id = 1"); repo.remove("id = 2"); auto users = repo.findAll();
 
-# WHERE Queries
+## WHERE Queries
 Supports filtering using conditions.
 Example: auto filtered = repo.where("name = 'Aryan'");
 
-# Dynamic ORM (Runtime Schema)
+## Dynamic ORM (Runtime Schema)
 No predefined model required.
 Example: DynamicModel student("students"); student.set("rollno", "12"); student.set("name", "Aryan"); student.set("age", "20");
 
-# Dynamic Table Creation
+## Dynamic Table Creation
 Tables can be created at runtime.
 Example: vector<pair<string, string>> cols = { {"rollno", "INTEGER PRIMARY KEY"}, {"name", "TEXT"}, {"age", "INTEGER"} }; db.execute(QueryBuilder::buildCreateTable("students", cols));
 
-# Fluent Query API
+## Fluent Query API
 Supports chainable queries.
 Example: auto results = dynamicRepo.query().table("students").where("age > 20").orderBy("name").limit(10).get();
 
@@ -69,10 +69,10 @@ Example: auto results = dynamicRepo.query().table("students").where("age > 20").
 Filtered:
 1 Aryan
 
-# After Update:
+## After Update:
 1 UpdatedName
 
-# After Delete:
+## After Delete:
 1 UpdatedName
 
 # Dynamic:
@@ -80,7 +80,7 @@ Filtered:
 
 ## Build and Run
 
-# Requirements
+## Requirements
 C++17 or higher
 SQLite3
 g++ (MinGW / MSYS2 recommended)
